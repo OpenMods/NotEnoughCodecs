@@ -128,6 +128,7 @@
 			<fileset dir="${mcp.dir}/reobf/minecraft/">
 				<include name="openmods/**/*" />
 				<include name="javazoom/**/*" />
+				<include name="net/sourceforge/jaad/**/*" />
 			</fileset>
 		</copy>
 	</target>

@@ -15,7 +15,7 @@ import paulscode.sound.SoundSystemConfig;
 
 public class CodecMp3 implements ICodec {
 
-    private boolean initalized;
+    private boolean initialized;
     private boolean streamClosed;
 
     private Bitstream bitstream;
@@ -34,7 +34,7 @@ public class CodecMp3 implements ICodec {
 
             bitstream = new Bitstream(conn.getInputStream());
             decoder = new Decoder();
-            initalized = true;
+            initialized = true;
 
             updateBuffer(); // get single frame here, to receive stream params
             audioFormat = new AudioFormat(decoder.getOutputFrequency(), 16, decoder.getOutputChannels(), true, false);
@@ -57,12 +57,12 @@ public class CodecMp3 implements ICodec {
 
     @Override
     public boolean initialized() {
-        return initalized;
+        return initialized;
     }
 
     @Override
     public SoundBuffer read() {
-        if (!initalized || streamClosed)
+        if (!initialized || streamClosed)
             return null;
 
         final int limit = SoundSystemConfig.getStreamingBufferSize();
@@ -84,7 +84,7 @@ public class CodecMp3 implements ICodec {
 
     @Override
     public SoundBuffer readAll() {
-        if (!initalized || streamClosed)
+        if (!initialized || streamClosed)
             return null;
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -122,7 +122,7 @@ public class CodecMp3 implements ICodec {
     @Override
     public void cleanup() {
         streamClosed = true;
-        initalized = false;
+        initialized = false;
         decoder = null;
         try {
             bitstream.close();

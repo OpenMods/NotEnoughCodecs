@@ -41,7 +41,8 @@ public class NotEnoughCodecs {
     }
 
     private static final List<CodecMeta> CODECS = ImmutableList.of(
-            new CodecMeta(CodecMp3.class, "MP3", "audio/mpeg", "audio/x-mpeg", "audio/mpeg3", "audio/x-mpeg3")
+            new CodecMeta(CodecMp3.class, "MP3", "audio/mpeg", "audio/x-mpeg", "audio/mpeg3", "audio/x-mpeg3"),
+            new CodecMeta(CodecAac.class, "AAC", "audio/aac", "audio/aacp", "audio/mp4", "audio/mpeg4-generic")
             );
 
     @EventHandler
