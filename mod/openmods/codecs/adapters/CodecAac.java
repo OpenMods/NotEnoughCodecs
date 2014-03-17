@@ -1,4 +1,4 @@
-package openmods.codecs;
+package openmods.codecs.adapters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -11,6 +11,8 @@ import javax.sound.sampled.AudioFormat;
 import net.sourceforge.jaad.aac.Decoder;
 import net.sourceforge.jaad.aac.SampleBuffer;
 import net.sourceforge.jaad.adts.ADTSDemultiplexer;
+import openmods.codecs.Log;
+import openmods.codecs.Utils;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;

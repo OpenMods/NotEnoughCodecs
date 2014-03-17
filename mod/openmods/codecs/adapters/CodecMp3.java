@@ -1,4 +1,4 @@
-package openmods.codecs;
+package openmods.codecs.adapters;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import javax.sound.sampled.AudioFormat;
 
 import javazoom.jl.decoder.*;
+import openmods.codecs.Log;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
