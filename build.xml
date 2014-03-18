@@ -139,14 +139,19 @@
 				<include name="mcmod.info" />
 				<include name="pack.mcmeta" />
 			</fileset>
-			<fileset dir="libs">
-				<include name="javazoom/jl/decoder/*.ser" />
-			</fileset>
 			<filterset>
 				<filter token="VERSION" value="${mod.version}" />
 			</filterset>
 		</copy>
+		<copy todir="${classes.dir}">
+			<fileset dir="libs">
+				<include name="javazoom/jl/decoder/*.ser" />
+			</fileset>
+		</copy>
 	</target>
+	
+	
+
 
 	<target name="create-manifest">
 		<mkdir dir="${classes.dir}/META-INF" />
