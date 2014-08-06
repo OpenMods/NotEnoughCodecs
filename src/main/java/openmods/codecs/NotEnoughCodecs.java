@@ -1,7 +1,6 @@
 package openmods.codecs;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,8 +23,6 @@ public class NotEnoughCodecs {
 
     @SidedProxy(clientSide = "openmods.codecs.ClientProxy", serverSide = "openmods.codecs.ServerProxy")
     public static IProxy proxy;
-
-    public static Logger logger;
 
     @SideOnly(Side.CLIENT)
     @EventHandler

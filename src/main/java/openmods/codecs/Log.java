@@ -1,9 +1,8 @@
 package openmods.codecs;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import cpw.mods.fml.common.FMLLog;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class Log {
     private Log() {}
@@ -11,8 +10,7 @@ public final class Log {
     private static final Logger logger;
 
     static {
-        logger = Logger.getLogger("NotEnoughCodecs");
-        logger.setParent(FMLLog.getLogger());
+        logger = LogManager.getLogger("NotEnoughCodecs");
     }
 
     private static final Throwable stackInfo = new Throwable();
@@ -33,39 +31,35 @@ public final class Log {
         logWithCaller(stackInfo.fillInStackTrace(), level, format, data);
     }
 
-    public static void severe(String format, Object... data) {
-        logWithCaller(stackInfo.fillInStackTrace(), Level.SEVERE, format, data);
+    public static void error(String format, Object... data) {
+        logWithCaller(stackInfo.fillInStackTrace(), Level.ERROR, format, data);
     }
 
     public static void warn(String format, Object... data) {
-        logWithCaller(stackInfo.fillInStackTrace(), Level.WARNING, format, data);
+        logWithCaller(stackInfo.fillInStackTrace(), Level.WARN, format, data);
     }
 
     public static void info(String format, Object... data) {
         logWithCaller(stackInfo.fillInStackTrace(), Level.INFO, format, data);
     }
 
-    public static void fine(String format, Object... data) {
-        logWithCaller(stackInfo.fillInStackTrace(), Level.FINE, format, data);
+    public static void debug(String format, Object... data) {
+        logWithCaller(stackInfo.fillInStackTrace(), Level.DEBUG, format, data);
     }
 
-    public static void finer(String format, Object... data) {
-        logWithCaller(stackInfo.fillInStackTrace(), Level.FINER, format, data);
-    }
-
-    public static void finest(String format, Object... data) {
-        logWithCaller(stackInfo.fillInStackTrace(), Level.FINEST, format, data);
+    public static void trace(String format, Object... data) {
+        logWithCaller(stackInfo.fillInStackTrace(), Level.TRACE, format, data);
     }
 
     public static void log(Level level, Throwable ex, String format, Object... data) {
         logger.log(level, String.format(format, data), ex);
     }
 
-    public static void severe(Throwable ex, String format, Object... data) {
-        log(Level.SEVERE, ex, format, data);
+    public static void error(Throwable ex, String format, Object... data) {
+        log(Level.ERROR, ex, format, data);
     }
 
     public static void warn(Throwable ex, String format, Object... data) {
-        log(Level.WARNING, ex, format, data);
+        log(Level.WARN, ex, format, data);
     }
 }
