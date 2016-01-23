@@ -5,9 +5,9 @@
 
 //================================================
 // Variables
-ext.mod_version = '0.3'
+ext.mod_version = '0.4'
 ext.mc_ver = '1.7.10'
-ext.forge_ver = '10.13.0.1180'
+ext.forge_ver = '10.13.4.1558-1.7.10'
 
 //================================================
 // Pre-execute
@@ -157,10 +157,17 @@ task deobfJar(type: Jar) {
 }
 
 shadowJar {
-  dependencies {
-    include(dependency('javazoom:jlayer:.*'))
-    include(dependency('net.sourceforge.jaadec:jaad:.*'))
-  }
+    dependencies {
+        include(dependency('javazoom:jlayer:.*'))
+        include(dependency('net.sourceforge.jaadec:jaad:.*'))
+    }
+
+    exclude 'GradleStart**'
+    exclude '.cache'
+}
+
+reobf.reobf(shadowJar) { spec ->
+    spec.classpath = sourceSets.main.compileClasspath;
 }
 
 artifacts {
