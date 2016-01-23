@@ -16,6 +16,7 @@ buildscript {
     repositories {
         // General deps
         mavenCentral()
+        jcenter()
         // Minecraft Forge
         maven {
             name = 'Forge'
@@ -31,20 +32,28 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
 }
 
 repositories {
+    mavenCentral()
+
     maven {
-        name 'Forge'
-        url 'http://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'MinecraftS3'
-        url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
+        url 'http://repo.openmods.info/artifactory/openmods'
     }
 }
 
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'forge'
+
+dependencies {
+    compile "javazoom:jlayer:1.0.1"
+    compile "net.sourceforge.jaadec:jaad:0.8.4"
+}
 
 //================================================
 // Jar data
@@ -104,7 +113,7 @@ ext.gitManifest = manifest {
 minecraft {
     version = mc_ver + "-" + forge_ver
     runDir = "run"
-    
+
     replaceIn "NotEnoughCodecs.java"
     replace '@VERSION@', mod_version
 }
@@ -118,11 +127,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.mod_version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -147,6 +156,13 @@ task deobfJar(type: Jar) {
     }
 }
 
+shadowJar {
+  dependencies {
+    include(dependency('javazoom:jlayer:.*'))
+    include(dependency('net.sourceforge.jaadec:jaad:.*'))
+  }
+}
+
 artifacts {
-    archives deobfJar
-} 
+    archives deobfJar, shadowJar
+}
