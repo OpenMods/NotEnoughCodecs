@@ -14,7 +14,7 @@ import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 
-public class CodecMp3 implements ICodec {
+public class CodecMP3 implements ICodec {
 
     private boolean initialized;
     private boolean streamClosed;

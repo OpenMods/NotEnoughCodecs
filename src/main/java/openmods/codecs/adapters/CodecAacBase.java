@@ -10,18 +10,16 @@ import javax.sound.sampled.AudioFormat;
 
 import net.sourceforge.jaad.aac.Decoder;
 import net.sourceforge.jaad.aac.SampleBuffer;
-import net.sourceforge.jaad.adts.ADTSDemultiplexer;
 import openmods.codecs.Log;
 import openmods.codecs.Utils;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 
-public class CodecAac implements ICodec {
+public abstract class CodecAacBase implements ICodec {
 
-    private boolean initialized;
-    private ADTSDemultiplexer adts;
-    private AudioFormat format;
+    protected boolean initialized;
+    protected AudioFormat format;
     private Decoder decoder;
     private boolean streamClosed;
     private SampleBuffer buf;
@@ -42,17 +40,14 @@ public class CodecAac implements ICodec {
             conn.connect();
 
             in = new DataInputStream(conn.getInputStream());
-            adts = new ADTSDemultiplexer(in);
-            format = new AudioFormat(adts.getSampleFrequency(), 16, adts.getChannelCount(), true, true);
-            decoder = new Decoder(adts.getDecoderSpecificInfo());
+            initializeStream(url, in);
+            decoder = new Decoder(getDecoderSpecificInfo());
             buf = new SampleBuffer();
             initialized = true;
 
             updateBuffer();
-            if (formatChanged(format, buf)) {
-                Log.warn("Stream %s header declared different format than buffer", url);
-                format = new AudioFormat(buf.getSampleRate(), buf.getBitsPerSample(), buf.getChannels(), true, buf.isBigEndian());
-            }
+            format = new AudioFormat(buf.getSampleRate(), buf.getBitsPerSample(), buf.getChannels(), true, buf.isBigEndian());
+            validateFormat(url);
 
             sampleInBytes = format.getSampleSizeInBits() / 8;
             endianessConflict = format.isBigEndian() && reverseBytes;
@@ -64,6 +59,16 @@ public class CodecAac implements ICodec {
 
         return false;
     }
+
+    protected abstract void initializeStream(URL url, DataInputStream in) throws IOException;
+
+    protected abstract byte[] getDecoderSpecificInfo();
+
+    protected abstract void validateFormat(URL url);
+
+    protected abstract byte[] readNextFrame() throws IOException;
+
+    protected abstract void cleanupSpecific();
 
     private static boolean formatChanged(AudioFormat af, SampleBuffer buf) {
         return af.getSampleRate() != buf.getSampleRate()
@@ -88,7 +93,7 @@ public class CodecAac implements ICodec {
     }
 
     private void updateBuffer() throws IOException {
-        byte[] b = adts.readNextFrame();
+        byte[] b = readNextFrame();
         decoder.decodeFrame(b, buf);
     }
 
@@ -150,7 +155,7 @@ public class CodecAac implements ICodec {
     public void cleanup() {
         streamClosed = true;
         initialized = false;
-        adts = null;
+        cleanupSpecific();
         decoder = null;
         try {
             in.close();
