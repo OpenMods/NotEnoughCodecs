@@ -31,9 +31,6 @@ buildscript {
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
-
-    dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
     }
 }
@@ -172,6 +169,7 @@ shadowJar {
         include(dependency('net.sourceforge.jaadec:jaad:.*'))
     }
 
+    exclude 'net.minecraftforge.**'
     exclude 'GradleStart**'
     exclude '.cache'
 }
