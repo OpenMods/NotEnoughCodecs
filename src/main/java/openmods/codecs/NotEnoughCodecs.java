@@ -4,17 +4,16 @@ import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = "NotEnoughCodecs", name = "NotEnoughCodecs", version = "@VERSION@")
 public class NotEnoughCodecs {
