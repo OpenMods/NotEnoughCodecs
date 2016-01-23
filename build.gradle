@@ -31,7 +31,6 @@ buildscript {
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
     }
 }
 
@@ -54,12 +53,16 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'forge'
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 dependencies {
-    compile "javazoom:jlayer:1.0.1"
-    compile "net.sourceforge.jaadec:jaad:0.8.4"
+    shade "javazoom:jlayer:1.0.1"
+    shade "net.sourceforge.jaadec:jaad:0.8.4"
 }
 
 //================================================
@@ -153,6 +156,12 @@ jar {
     manifest {
         from jenkinsManifest, gitManifest
     }
+
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
 }
 
 task deobfJar(type: Jar) {
@@ -163,21 +172,6 @@ task deobfJar(type: Jar) {
     }
 }
 
-shadowJar {
-    dependencies {
-        include(dependency('javazoom:jlayer:.*'))
-        include(dependency('net.sourceforge.jaadec:jaad:.*'))
-    }
-
-    exclude 'net.minecraftforge.**'
-    exclude 'GradleStart**'
-    exclude '.cache'
-}
-
-reobf.reobf(shadowJar) { spec ->
-    spec.classpath = sourceSets.main.compileClasspath;
-}
-
 artifacts {
-    archives deobfJar, shadowJar
+    archives deobfJar
 }
