@@ -33,7 +33,10 @@ public class ClientProxy implements IProxy {
         registerCodec(CodecMP4.class, "M4A");
         registerCodec(CodecFLAC.class, "FLAC", "audio/flac");
 
-        registerCodec("paulscode.sound.codecs.CodecIBXM", "XM", "audio/xm"); // unconfirmed, but whatever
+        registerCodec("paulscode.sound.codecs.CodecIBXM", "XM", "audio/xm", "audio/x-xm"); // unconfirmed, but whatever
+        registerCodec("paulscode.sound.codecs.CodecIBXM", "S3M", "audio/s3m", "audio/x-s3m");
+        registerCodec("paulscode.sound.codecs.CodecIBXM", "MOD", "audio/mod", "audio/x-mod");
+
         registerCodec("paulscode.sound.codecs.CodecWav", "WAV", "audio/wav", "audio/x-wav", "audio/wave");
     }
 }
