@@ -1,9 +1,6 @@
 package openmods.codecs;
 
-import openmods.codecs.adapters.CodecADTS;
-import openmods.codecs.adapters.CodecFLAC;
-import openmods.codecs.adapters.CodecMP3;
-import openmods.codecs.adapters.CodecMP4;
+import openmods.codecs.adapters.*;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundSystemConfig;
 
@@ -14,7 +11,17 @@ public class ClientProxy implements IProxy {
             for (String type : mimeTypes)
                 NotEnoughCodecs.KNOWN_MIME_TYPES.put(type, ext);
         } catch (Throwable t) {
-            Log.warn(t, "Can't register codec for extension %s", ext);
+            Log.warn(t, "Can't register codec %s for extension %s", cls.getName(), ext);
+        }
+    }
+
+    private static void registerCodec(String clsName, String ext, String... mimeTypes) {
+        try {
+            Class<?> cls = Class.forName(clsName);
+            Class<? extends ICodec> castedCls = cls.asSubclass(ICodec.class);
+            registerCodec(castedCls, ext, mimeTypes);
+        } catch (Throwable t) {
+            Log.warn(t, "Can't register codec %s for extension %s", clsName, ext);
         }
     }
 
@@ -25,5 +32,8 @@ public class ClientProxy implements IProxy {
         registerCodec(CodecMP4.class, "MP4", "audio/mp4", "audio/mpeg4-generic");
         registerCodec(CodecMP4.class, "M4A");
         registerCodec(CodecFLAC.class, "FLAC", "audio/flac");
+
+        registerCodec("paulscode.sound.codecs.CodecIBXM", "XM", "audio/xm"); // unconfirmed, but whatever
+        registerCodec("paulscode.sound.codecs.CodecWav", "WAV", "audio/wav", "audio/x-wav", "audio/wave");
     }
 }
