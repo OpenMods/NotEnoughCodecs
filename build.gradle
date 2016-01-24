@@ -57,8 +57,9 @@ configurations {
 }
 
 dependencies {
-    shade "javazoom:jlayer:1.0.1"
+    shade "com.badlogicgames.jlayer:jlayer:1.0.2-gdx"
     shade "net.sourceforge.jaadec:jaad:0.8.4"
+    shade "org.drogatkin:JustFLAC:1.0"
 }
 
 //================================================

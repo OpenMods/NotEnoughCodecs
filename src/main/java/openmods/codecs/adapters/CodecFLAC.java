@@ -1,27 +1,26 @@
 package openmods.codecs.adapters;
 
-import javazoom.jl.decoder.*;
 import openmods.codecs.Log;
+import org.kc7bfi.jflac.FLACDecoder;
+import org.kc7bfi.jflac.frame.Frame;
+import org.kc7bfi.jflac.util.ByteData;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class CodecMP3 implements ICodec {
+public class CodecFLAC implements ICodec {
 
     private boolean initialized;
     private boolean streamClosed;
 
-    private Bitstream bitstream;
-    private MP3Decoder decoder;
+    private ByteData buffer;
+    private FLACDecoder decoder;
     private AudioFormat audioFormat;
-    private OutputBuffer buffer;
 
     @Override
     public void reverseByteOrder(boolean b) {}
@@ -32,12 +31,12 @@ public class CodecMP3 implements ICodec {
             final URLConnection conn = url.openConnection();
             conn.connect();
 
-            bitstream = new Bitstream(conn.getInputStream());
-            decoder = new MP3Decoder();
+            decoder = new FLACDecoder(conn.getInputStream());
+            decoder.readStreamInfo();
             initialized = true;
 
-            updateBuffer(); // get single frame here, to receive stream params
-            audioFormat = new AudioFormat(decoder.getOutputFrequency(), 16, decoder.getOutputChannels(), true, false);
+            audioFormat = new AudioFormat(decoder.getStreamInfo().getSampleRate(), decoder.getStreamInfo().getBitsPerSample(), decoder.getStreamInfo().getChannels(), true, false);
+            updateBuffer();
             return true;
         } catch (Throwable t) {
             Log.warn(t, "Failed to initalize codec for url '%s'", url);
@@ -47,18 +46,14 @@ public class CodecMP3 implements ICodec {
     }
 
     private boolean updateBuffer() throws Exception {
-        Header h = bitstream.readFrame();
-        if (h == null)
+        Frame frame = decoder.readNextFrame();
+        if (decoder.isEOF() || frame == null) {
+            streamClosed = true;
             return false;
-        if (buffer == null) {
-            buffer = new OutputBuffer(h.mode() == Header.SINGLE_CHANNEL ? 1 : 2, false);
-            decoder.setOutputBuffer(buffer);
         } else {
-            buffer.reset();
+            buffer = decoder.decodeFrame(frame, null);
+            return true;
         }
-        decoder.decodeFrame(h, bitstream);
-        bitstream.closeFrame();
-        return true;
     }
 
     @Override
@@ -76,7 +71,7 @@ public class CodecMP3 implements ICodec {
 
         try {
             do {
-                readBytes(output);
+                output.write(buffer.getData(), 0, buffer.getLen());
                 if (!updateBuffer())
                     break;
             } while (!streamClosed && output.size() < limit);
@@ -97,7 +92,7 @@ public class CodecMP3 implements ICodec {
 
         try {
             do {
-                readBytes(output);
+                output.write(buffer.getData(), 0, buffer.getLen());
                 if (!updateBuffer())
                     break;
             } while (!streamClosed);
@@ -107,10 +102,6 @@ public class CodecMP3 implements ICodec {
         }
 
         return new SoundBuffer(output.toByteArray(), audioFormat);
-    }
-
-    private void readBytes(OutputStream output) throws IOException {
-        output.write(buffer.getBuffer());
     }
 
     @Override
@@ -123,13 +114,6 @@ public class CodecMP3 implements ICodec {
         streamClosed = true;
         initialized = false;
         decoder = null;
-        try {
-            bitstream.close();
-        } catch (BitstreamException e) {
-            Log.warn(e, "Failed to close bitstream");
-        }
-        bitstream = null;
-        buffer = null;
     }
 
     @Override
