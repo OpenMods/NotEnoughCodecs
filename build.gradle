@@ -42,6 +42,10 @@ repositories {
     maven {
         url 'http://repo.openmods.info/artifactory/openmods'
     }
+
+    maven {
+        url 'http://repo.openmods.info/artifactory/thirdparty'
+    }
 }
 
 apply plugin: 'java'
