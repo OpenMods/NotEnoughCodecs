@@ -69,7 +69,7 @@ dependencies {
 // Grab system env
 ext.env = System.getenv()
 
-version = mc_ver + "-" + mod_version
+version = mod_version
 
 ext.in_jenkins = false
 // Get Jenkins metadata
@@ -138,8 +138,8 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
-        // replace version and mcversion
-        expand 'version':project.mod_version, 'mcversion':project.minecraft.version
+        // replace version
+        expand 'version':project.mod_version
     }
 
     // copy everything else, thats not the mcmod.info
