@@ -1,18 +1,3 @@
-/*
- * NotEnoughCodecs build file.
- * @author Arkan <arkan@emberwalker.cc>
- */
-
-//================================================
-// Variables
-ext.mod_version = '0.5'
-ext.mc_ver = '1.9'
-ext.mappings_ver = 'snapshot_20160511'
-ext.forge_ver = '12.16.1.1901'
-
-//================================================
-// Pre-execute
-
 buildscript {
     repositories {
         jcenter()
@@ -26,6 +11,49 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+
+
+def mc_version_data = [
+    '1.8': [
+        forge_ver: '11.14.4.1563',
+        mappings_ver: 'snapshot_20141130'
+    ],
+    '1.8.8': [
+        forge_ver: '11.15.0.1655',
+        mappings_ver: 'snapshot_20151122'
+    ],
+    '1.8.9': [
+        forge_ver: '11.15.1.1902-1.8.9',
+        mappings_ver: 'stable_20'
+    ],
+    '1.9': [
+        forge_ver: '12.16.1.1887',
+        mappings_ver: 'snapshot_20160312'
+    ],
+    '1.9.4': [
+        forge_ver: '12.17.0.1976',
+        mappings_ver: 'snapshot_20160518'
+    ],
+    '1.10.2' : [
+        forge_ver: '12.18.0.2008',
+        mappings_ver: 'snapshot_20160518'
+    ]
+]
+
+
+if (!project.hasProperty('mc_ver')) {
+    ext.mc_ver = default_mc_ver
+}
+
+if (!mc_version_data.containsKey(mc_ver)) {
+    throw new GradleException("Invalid Minecraft version")
+}
+
+def version_data = mc_version_data[mc_ver]
+println "Building for MC ${mc_ver}, version data: ${version_data}"
+ext.forge_ver = version_data.forge_ver
+ext.mappings_ver = version_data.mappings_ver
+
 
 repositories {
     mavenCentral()
@@ -63,15 +91,12 @@ dependencies {
     shade "org.drogatkin:JustFLAC:1.0"
 }
 
-//================================================
-// Jar data
-
 // Grab system env
-ext.env = System.getenv()
+def env = System.getenv()
 
 version = mod_version
 
-ext.in_jenkins = false
+def in_jenkins = false
 // Get Jenkins metadata
 ext.jenkinsManifest = manifest {
     if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
@@ -101,8 +126,6 @@ if (!in_jenkins) {
 // If not on master, add branch to jar name
 if (branch != null && !branch.equals("master")) {
     version += "-" + branch
-} else {
-    //version += "-" + hash
 }
 
 // Version tag for jar file name
@@ -112,7 +135,7 @@ if (env.BUILD_NUMBER != null) {
 
 // Get Git metadata (if in Jenkins)
 ext.gitManifest = manifest {
-    if (env.GIT_BRANCH != null) {
+    if (branch != null) {
         attributes("Git-Branch": branch, "Git-Hash": hash)
     }
 }
@@ -125,6 +148,7 @@ minecraft {
     mappings = mappings_ver
 
     replaceIn "NotEnoughCodecs.java"
+    replace '@ACCEPTED_MC_VERSIONS@', mc_version_range
     replace '@VERSION@', mod_version
 }
 
@@ -147,9 +171,6 @@ processResources
         exclude 'mcmod.info'
     }
 }
-
-//================================================
-// Jar tasks
 
 // Merge Jenkins and Git manifests to form final manifest in final release jar
 jar {

@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Maps;
 
-@Mod(modid = "NotEnoughCodecs", name = "NotEnoughCodecs", version = "@VERSION@", acceptedMinecraftVersions = "[1.8,1.10)", acceptableRemoteVersions = "*")
+@Mod(modid = "NotEnoughCodecs", name = "NotEnoughCodecs", version = "@VERSION@", acceptedMinecraftVersions = "@ACCEPTED_MC_VERSIONS@", acceptableRemoteVersions = "*")
 public class NotEnoughCodecs {
 
     public static final Map<String, String> KNOWN_MIME_TYPES = Maps.newHashMap();
