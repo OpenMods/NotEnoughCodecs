@@ -16,27 +16,38 @@ buildscript {
 def mc_version_data = [
     '1.8': [
         forge_ver: '11.14.4.1563',
-        mappings_ver: 'snapshot_20141130'
+        mappings_ver: 'snapshot_20141130',
+        settings_ver: "V1"
     ],
     '1.8.8': [
         forge_ver: '11.15.0.1655',
-        mappings_ver: 'snapshot_20151122'
+        mappings_ver: 'snapshot_20151122',
+        settings_ver: "V1"
     ],
     '1.8.9': [
         forge_ver: '11.15.1.1902-1.8.9',
-        mappings_ver: 'stable_20'
+        mappings_ver: 'stable_20',
+        settings_ver: "V1"
     ],
     '1.9': [
         forge_ver: '12.16.1.1887',
-        mappings_ver: 'snapshot_20160312'
+        mappings_ver: 'snapshot_20160312',
+        settings_ver: "V1"
     ],
     '1.9.4': [
         forge_ver: '12.17.0.1976',
-        mappings_ver: 'snapshot_20160518'
+        mappings_ver: 'snapshot_20160518',
+        settings_ver: "V1"
     ],
     '1.10.2' : [
         forge_ver: '12.18.0.2008',
-        mappings_ver: 'snapshot_20160518'
+        mappings_ver: 'snapshot_20160518',
+        settings_ver: "V1"
+    ],
+    '1.11' : [
+        forge_ver: '13.19.0.2162',
+        mappings_ver: 'snapshot_20161111',
+        settings_ver: "V2"
     ]
 ]
 
@@ -51,9 +62,11 @@ if (!mc_version_data.containsKey(mc_ver)) {
 
 def version_data = mc_version_data[mc_ver]
 println "Building for MC ${mc_ver}, version data: ${version_data}"
-ext.forge_ver = version_data.forge_ver
-ext.mappings_ver = version_data.mappings_ver
-
+ext {
+    forge_ver = version_data.forge_ver
+    mappings_ver = version_data.mappings_ver
+    settings_ver = version_data.settings_ver
+}
 
 repositories {
     mavenCentral()
@@ -79,6 +92,15 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources-${settings_ver}"]
+        }
+    }
+}
+
 
 configurations {
     shade
@@ -148,8 +170,8 @@ minecraft {
     mappings = mappings_ver
 
     replaceIn "NotEnoughCodecs.java"
-    replace '@ACCEPTED_MC_VERSIONS@', mc_version_range
     replace '@VERSION@', mod_version
+    replace 'ModSettings.Default', "ModSettings.${settings_ver}"
 }
 
 processResources

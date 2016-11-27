@@ -1,6 +1,9 @@
 package openmods.codecs;
 
-import openmods.codecs.adapters.*;
+import openmods.codecs.adapters.CodecADTS;
+import openmods.codecs.adapters.CodecFLAC;
+import openmods.codecs.adapters.CodecMP3;
+import openmods.codecs.adapters.CodecMP4;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundSystemConfig;
 

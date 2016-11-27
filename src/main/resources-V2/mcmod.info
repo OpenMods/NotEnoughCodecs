@@ -1,0 +1,15 @@
+[
+{
+  "modid": "notenoughcodecs",
+  "name": "NotEnoughCodecs",
+  "description": "Streaming codecs for various formats",
+  "version": "${version}",
+  "url": "http://openmods.info",
+  "updateUrl": "",
+  "authorList": [],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
