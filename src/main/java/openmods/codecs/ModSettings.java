@@ -20,7 +20,7 @@ public class ModSettings {
     public class V2 {
         public static final String ID = "notenoughcodecs";
         public static final String NAME = "NotEnoughCodecs";
-        public static final String MC_VERSIONS = "[1.10.2,1.12)";
+        public static final String MC_VERSIONS = "[1.10.2,1.13)";
     }
 
 }

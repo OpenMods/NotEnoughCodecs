@@ -1,0 +1,80 @@
+def mc_version_data = [
+    '1.8': [
+        forge_ver: '11.14.4.1563',
+        mappings_ver: 'snapshot_20141130',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    ],
+    '1.8.8': [
+        forge_ver: '11.15.0.1655',
+        mappings_ver: 'snapshot_20151122',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    ],
+    '1.8.9': [
+        forge_ver: '11.15.1.1902-1.8.9',
+        mappings_ver: 'stable_20',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    ],
+    '1.9': [
+        forge_ver: '12.16.1.1887',
+        mappings_ver: 'snapshot_20160312',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    ],
+    '1.9.4': [
+        forge_ver: '12.17.0.1976',
+        mappings_ver: 'snapshot_20160518',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    ],
+    '1.10.2' : [
+        forge_ver: '12.18.0.2008',
+        mappings_ver: 'snapshot_20160518',
+        settings_ver: "V1",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    ],
+    '1.11' : [
+        forge_ver: '13.19.0.2162',
+        mappings_ver: 'snapshot_20161111',
+        settings_ver: "V2",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    ],
+    '1.11.2' : [
+        forge_ver: '13.20.1.2386',
+        mappings_ver: 'snapshot_20161220',
+        settings_ver: "V2",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    ],
+    '1.12' : [
+        forge_ver: '14.21.1.2387',
+        mappings_ver: 'snapshot_20170624',
+        settings_ver: "V2",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    ],
+    '1.12.1' : [
+        forge_ver: '14.22.0.2459',
+        mappings_ver: 'snapshot_20170624',
+        settings_ver: "V2",
+        forgegradle_ver: 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    ]
+]
+
+if (!hasProperty('mc_ver')) {
+    ext.mc_ver = default_mc_ver
+}
+
+if (!mc_version_data.containsKey(mc_ver)) {
+    throw new GradleException("Invalid Minecraft version")
+}
+
+def version_data = mc_version_data[mc_ver]
+
+ext {
+    version_config = version_data
+    forge_ver = version_data.forge_ver
+    mappings_ver = version_data.mappings_ver
+    settings_ver = version_data.settings_ver
+    forgegradle_ver = version_data.forgegradle_ver
+}
