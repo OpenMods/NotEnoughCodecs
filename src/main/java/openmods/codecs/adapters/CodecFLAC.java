@@ -1,9 +1,9 @@
 package openmods.codecs.adapters;
 
 import openmods.codecs.Log;
-import org.kc7bfi.jflac.FLACDecoder;
-import org.kc7bfi.jflac.frame.Frame;
-import org.kc7bfi.jflac.util.ByteData;
+import org.jflac.FLACDecoder;
+import org.jflac.frame.Frame;
+import org.jflac.util.ByteData;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
