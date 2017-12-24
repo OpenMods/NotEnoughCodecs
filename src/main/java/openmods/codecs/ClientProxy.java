@@ -1,9 +1,7 @@
 package openmods.codecs;
 
-import openmods.codecs.adapters.CodecADTS;
 import openmods.codecs.adapters.CodecFLAC;
 import openmods.codecs.adapters.CodecMP3;
-import openmods.codecs.adapters.CodecMP4;
 import paulscode.sound.ICodec;
 import paulscode.sound.SoundSystemConfig;
 
@@ -31,9 +29,6 @@ public class ClientProxy implements IProxy {
     @Override
     public void registerCodecs() {
         registerCodec(CodecMP3.class, "MP3", "audio/mpeg", "audio/x-mpeg", "audio/mpeg3", "audio/x-mpeg3");
-        registerCodec(CodecADTS.class, "AAC", "audio/aac", "audio/aacp", "audio/mp4", "audio/mpeg4-generic");
-        registerCodec(CodecMP4.class, "MP4", "audio/mp4", "audio/mpeg4-generic");
-        registerCodec(CodecMP4.class, "M4A");
         registerCodec(CodecFLAC.class, "FLAC", "audio/flac");
 
         registerCodec("paulscode.sound.codecs.CodecIBXM", "XM", "audio/xm", "audio/x-xm"); // unconfirmed, but whatever
